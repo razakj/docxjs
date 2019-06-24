@@ -1,0 +1,8 @@
+src
+yarn-error.log
+.idea
+.vscode
+.tsconfig
+package-lock.json
+.gitignore
+scripts
