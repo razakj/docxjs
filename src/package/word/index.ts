@@ -7,9 +7,9 @@ import getDocRels from "./_rels";
 import getHeaderOrFooter, {HeaderFooterProperties, HeaderFooterType} from './headerfooter';
 import getReaderOrFooterRels from './_rels-headerfooter';
 
-import {ImageIndex} from './parts/image';
-
 import {ContentOptions} from "../contenttypes";
+import {FileIndex} from "../../index";
+import {DocumentBody} from "./parts/content";
 
 export interface Word {
     document            : string,
@@ -29,6 +29,7 @@ export interface Word {
 }
 
 export interface WordProps {
+    body                    : DocumentBody[],
     documentProperties?     : DocumentProperties,
     settingsProperties?     : SettingsProperties,
     styles?                 : StylesProperties,
@@ -41,32 +42,38 @@ export interface WordProps {
     firstPageFooter?        : HeaderFooterProperties
 }
 
-export default (wordProps: WordProps, contentOptions: ContentOptions, imageIndex: ImageIndex[]): Word => {
 
-    const document      = getDocument(wordProps.documentProperties ? wordProps.documentProperties : {} as DocumentProperties, contentOptions);
+export default (wordProps: WordProps, contentOptions: ContentOptions, fileIndex: FileIndex[]): Word => {
+
+    const document      = getDocument(
+        wordProps.body,
+        wordProps.documentProperties ? wordProps.documentProperties : {} as DocumentProperties,
+        contentOptions,
+        fileIndex
+    );
     const headers       = {
         defaultHeader   : contentOptions.hasDefaultHeader   ? getHeaderOrFooter({
             hf          : wordProps.defaultHeader ? wordProps.defaultHeader : {} as HeaderFooterProperties,
             type        : HeaderFooterType.HEADER,
-            imageIndex  : imageIndex,
+            fileIndex   : fileIndex,
             sourceName  : 'defaultHeader.xml'
         }) : '',
         defaultFooter   : contentOptions.hasDefaultFooter   ? getHeaderOrFooter({
             hf          : wordProps.defaultFooter ? wordProps.defaultFooter : {} as HeaderFooterProperties,
             type        : HeaderFooterType.FOOTER,
-            imageIndex  : imageIndex,
+            fileIndex   : fileIndex,
             sourceName  : 'defaultFooter.xml'
         }) : '',
         firstPageHeader : contentOptions.hasFirstPageHeader ? getHeaderOrFooter({
             hf          : wordProps.firstPageHeader ? wordProps.firstPageHeader : {} as HeaderFooterProperties,
             type        : HeaderFooterType.HEADER,
-            imageIndex  : imageIndex,
+            fileIndex   : fileIndex,
             sourceName  : 'firstPageHeader.xml'
         }) : '',
         firstPageFooter : contentOptions.hasFirstPageFooter ? getHeaderOrFooter({
             hf          : wordProps.firstPageFooter ? wordProps.firstPageFooter : {} as HeaderFooterProperties,
             type        : HeaderFooterType.FOOTER,
-            imageIndex  : imageIndex,
+            fileIndex   : fileIndex,
             sourceName  : 'firstPageFooter.xml'
         }) : '',
     };
@@ -77,11 +84,11 @@ export default (wordProps: WordProps, contentOptions: ContentOptions, imageIndex
         settings            : getSettings(wordProps.settingsProperties ? wordProps.settingsProperties : {} as SettingsProperties),
         styles              : getStyles(wordProps.styles ? wordProps.styles : {} as StylesProperties, wordProps.docDefaults),
         webSettings         : getWebSettings(wordProps.webSettingsProperties ? wordProps.webSettingsProperties : {} as WebSettingsProperties),
-        docRels             : getDocRels(contentOptions, imageIndex.filter(i => i.sourceName === 'document.xml')),
+        docRels             : getDocRels(contentOptions, fileIndex.filter(i => i.sourceName === 'document.xml')),
         ...headers,
-        defaultHeaderRels   : getReaderOrFooterRels(imageIndex.filter(i => i.sourceName === 'defaultHeader.xml')),
-        defaultFooterRels   : getReaderOrFooterRels(imageIndex.filter(i => i.sourceName === 'defaultFooter.xml')),
-        firstPageHeaderRels : getReaderOrFooterRels(imageIndex.filter(i => i.sourceName === 'firstPageHeader.xml')),
-        firstPageFooterRels : getReaderOrFooterRels(imageIndex.filter(i => i.sourceName === 'firstPageFooter.xml')),
+        defaultHeaderRels   : getReaderOrFooterRels(fileIndex.filter(i => i.sourceName === 'defaultHeader.xml')),
+        defaultFooterRels   : getReaderOrFooterRels(fileIndex.filter(i => i.sourceName === 'defaultFooter.xml')),
+        firstPageHeaderRels : getReaderOrFooterRels(fileIndex.filter(i => i.sourceName === 'firstPageHeader.xml')),
+        firstPageFooterRels : getReaderOrFooterRels(fileIndex.filter(i => i.sourceName === 'firstPageFooter.xml')),
     }
 };

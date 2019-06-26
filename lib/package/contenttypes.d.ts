@@ -1,5 +1,4 @@
 export interface ContentOptions {
-    hasHtmlContent: boolean;
     hasDefaultHeader: boolean;
     hasDefaultFooter: boolean;
     hasFirstPageHeader: boolean;

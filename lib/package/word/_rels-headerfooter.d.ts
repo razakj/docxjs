@@ -1,3 +1,3 @@
-import { ImageIndex } from "./parts/image";
-declare const _default: (imageIndex: ImageIndex[]) => string;
+import { FileIndex } from "../../index";
+declare const _default: (fileIndex: FileIndex[]) => string;
 export default _default;

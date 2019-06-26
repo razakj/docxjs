@@ -1,12 +1,10 @@
 import {ContentOptions} from "../contenttypes";
-import {ImageIndex}     from "./parts/image";
+import {FileIndex} from "../../index";
 
-export default (contentOptions: ContentOptions, imageIndex: ImageIndex[]): string => (`
+export default (contentOptions: ContentOptions, fileIndex: FileIndex[]): string => (`
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-    ${contentOptions.hasHtmlContent ? 
-        '<Relationship Id="htmlDoc" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/aFChunk" Target="htmlDoc.html"/>' : ''
-    }
+    ${fileIndex.map(f => `<Relationship Id="${f.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/${f.type}" Target="/${f.fullPath}" />`).join('')}
     ${contentOptions.hasDefaultHeader         ?
         '<Relationship Id="defaultHeader" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="defaultHeader.xml"/>' : ''
     }
@@ -23,6 +21,5 @@ export default (contentOptions: ContentOptions, imageIndex: ImageIndex[]): strin
     <Relationship Id="settings" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>
     <Relationship Id="webSettings" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings" Target="webSettings.xml"/>
     <Relationship Id="fontTable" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable" Target="fontTable.xml"/>
-    ${imageIndex.map(img => `<Relationship Id="${img.fileName}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/${img.fileName}"/>`)}
 </Relationships>
 `)

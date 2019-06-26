@@ -1,8 +1,8 @@
-import getParagraph, {Paragraph} from "./parts/paragraph";
 import {PageNumberPosition, PageNumberProperties} from "./parts/pagenumber";
-import {ImageIndex} from './parts/image';
+import getDocumentContent, {DocumentBody} from "./parts/content";
 
 import pageNumber from './parts/pagenumber';
+import {FileIndex} from "../../index";
 
 export enum HeaderFooterType {
     HEADER  = "hdr",
@@ -10,14 +10,14 @@ export enum HeaderFooterType {
 }
 
 export interface HeaderFooterProperties {
-    paragraphs          : Paragraph[],
+    body                : DocumentBody[],
     pageNumber?         : PageNumberProperties
 }
 
 export interface HeaderFooter {
     hf          : HeaderFooterProperties,
     type        : HeaderFooterType,
-    imageIndex  : ImageIndex[],
+    fileIndex   : FileIndex[],
     sourceName  : string
 }
 
@@ -45,7 +45,7 @@ export default (headerOrFooter: HeaderFooter): string => (`
     xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
 >
     ${headerOrFooter.hf.pageNumber && headerOrFooter.hf.pageNumber.position === PageNumberPosition.TOP ? pageNumber(headerOrFooter.hf.pageNumber) : ''}
-    ${Array.isArray(headerOrFooter.hf.paragraphs) ? headerOrFooter.hf.paragraphs.map(p => getParagraph(p, headerOrFooter.imageIndex, headerOrFooter.sourceName)) : ''}
+    ${headerOrFooter.hf.body.map(body => getDocumentContent(body, headerOrFooter.fileIndex, headerOrFooter.sourceName)).join('')}
     ${headerOrFooter.hf.pageNumber && headerOrFooter.hf.pageNumber.position === PageNumberPosition.BOTTOM ? pageNumber(headerOrFooter.hf.pageNumber) : ''}
 </w:${headerOrFooter.type}>
 `)

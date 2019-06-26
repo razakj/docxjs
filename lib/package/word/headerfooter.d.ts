@@ -1,18 +1,18 @@
-import { Paragraph } from "./parts/paragraph";
 import { PageNumberProperties } from "./parts/pagenumber";
-import { ImageIndex } from './parts/image';
+import { DocumentBody } from "./parts/content";
+import { FileIndex } from "../../index";
 export declare enum HeaderFooterType {
     HEADER = "hdr",
     FOOTER = "ftr"
 }
 export interface HeaderFooterProperties {
-    paragraphs: Paragraph[];
+    body: DocumentBody[];
     pageNumber?: PageNumberProperties;
 }
 export interface HeaderFooter {
     hf: HeaderFooterProperties;
     type: HeaderFooterType;
-    imageIndex: ImageIndex[];
+    fileIndex: FileIndex[];
     sourceName: string;
 }
 declare const _default: (headerOrFooter: HeaderFooter) => string;

@@ -4,8 +4,9 @@ import { SettingsProperties } from "./settings";
 import { StylesProperties } from "./styles";
 import { WebSettingsProperties } from "./websettings";
 import { HeaderFooterProperties } from './headerfooter';
-import { ImageIndex } from './parts/image';
 import { ContentOptions } from "../contenttypes";
+import { FileIndex } from "../../index";
+import { DocumentBody } from "./parts/content";
 export interface Word {
     document: string;
     fontTable: string;
@@ -23,6 +24,7 @@ export interface Word {
     firstPageFooterRels: string;
 }
 export interface WordProps {
+    body: DocumentBody[];
     documentProperties?: DocumentProperties;
     settingsProperties?: SettingsProperties;
     styles?: StylesProperties;
@@ -34,5 +36,5 @@ export interface WordProps {
     firstPageHeader?: HeaderFooterProperties;
     firstPageFooter?: HeaderFooterProperties;
 }
-declare const _default: (wordProps: WordProps, contentOptions: ContentOptions, imageIndex: ImageIndex[]) => Word;
+declare const _default: (wordProps: WordProps, contentOptions: ContentOptions, fileIndex: FileIndex[]) => Word;
 export default _default;

@@ -8,76 +8,107 @@ const docxjs = require('../lib/index');
         const b = await docxjs.toFile({
             filePath    : 'C:\\Users\\jakub\\Desktop\\test.docx',
             defaultHeader       : {
-                paragraphs      : [
-                    {content: {
-                        type    : "image",
-                        data    : {
-                            fileName        : 'test.jpg',
-                            title           : 'Test',
-                            description     : 'Testing',
-                            buffer          : fs.readFileSync(path.join('C:\\Users\\jakub\\Pictures', 'unnamed.jpg')),
-                            widthInCm       : 10,
-                            heightInCm      : 2,
-                            position        : "anchor"
+                body            : [
+                    {paragraph  : {
+                        content : {
+                            type    : "image",
+                            data    : {
+                                fileName        : 'test.jpg',
+                                title           : 'Test',
+                                description     : 'Testing',
+                                buffer          : fs.readFileSync(path.join('C:\\Users\\jakub\\Pictures', 'unnamed.jpg')),
+                                widthInCm       : 50,
+                                heightInCm      : 1,
+                                position        : "relative",
+                                isBackground    : true,
+                                relativePositionOptions : {
+                                    horizontalRelativeFrom  : "page",
+                                    verticalRelativeFrom    : "page",
+                                    horizontalPosition      : "left",
+                                    verticalPosition        : "top"
+                                }
+                            }
                         }
                     }}
                 ]
             },
-            // defaultFooter       : {
-            //     paragraphs      : [{content: 'DEFAULT FOOTER'}, {content: 'DEFAULT FOOTER'}]
+            // documentProperties         : {
+            //     headerFromTopInCm       : 0,
+            //     footerFromBottomInCm    : 0,
+            //
             // },
-            documentProperties         : {
-                headerFromTopInCm       : 0,
-                footerFromBottomInCm    : 0,
-
+            // firstPageHeader             : {
+            //     body                    : [
+            //         {paragraph: {content    : [
+            //             {type: "text", data: "Hi1"}, {type: "text", data: "Hi2"}
+            //         ]}},
+            //         {html: '<html><head></head><body><div style="margin-left: -20px;">HEADER</div></body></html>'}
+            //     ]
+            // },
+            body                        : [
+                // {paragraph: 'Test'},
+                // {paragraph: {content    : [
+                //     {
+                //         type    : "image",
+                //         data    : {
+                //             fileName        : 'test2.jpg',
+                //             title           : 'Test 2',
+                //             description     : 'Testing 2',
+                //             //buffer          : fs.readFileSync(path.join('C:\\Users\\jakub\\Pictures', 'unnamed.jpg')),
+                //             url             : 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+                //             widthInCm       : 50,
+                //             heightInCm      : 1,
+                //             position        : "relative",
+                //             isBackground    : true,
+                //             relativePositionOptions : {
+                //                 horizontalRelativeFrom  : "page",
+                //                 verticalRelativeFrom    : "line",
+                //                 horizontalPosition      : "left",
+                //                 verticalPosition        : "top"
+                //             }
+                //         }
+                //     },
+                //     {
+                //         type    : "text",
+                //         data    : "Hello i'm text"
+                //     }
+                // ]}},
+                {paragraph: {
+                    content : ['test', '  test2']
+                }},
+                {html: '<html><head></head><body><table><tbody><tr><td>sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
+                {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
+                // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
+                // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
+                // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
+                // {html: '<html><head></head><body><strong>BODY</strong></body></html>'}
+            ],
+            htmlDocumentModifier: document => {
+                document.querySelectorAll('table').forEach(t => t.parentNode.removeChild(t));
+            },
+            docDefaults : {
+                default : {
+                    paragraph: {
+                        spacing : {
+                            after : 0,
+                            before:0
+                        }
+                    },
+                    text    : {
+                        font : {
+                            ascii : 'Courier New'
+                        }
+                    }
+                }
             },
             styles      : {
-                testStyle: {
-                    paragraph: {
-                        // spacing             : {
-                        //     after               : 0,
-                        //     before              : 0,
-                        //     beforeAutospacing   : 0,
-                        //     afterAutospacing    : 0,
-                        //     line                : 0,
-                        //     lineRule            : 0
-                        // }
-                    },
-                    text: {
+                testTextStyle: {
+                    type    : "character",
+                    text    : {
                         color: 'red'
                     }
                 }
             },
-            htmlContent : (`
-                <!DOCTYPE html>
-                <html>
-                  <head>
-                    <style>table, th, td {border: 1px solid black;border-collapse:collapse;}</style>
-                    <title>HTML import</title>
-                  </head>
-                  <body>
-                    <p>Simple paragraph with a 
-                    <strong>emphasized</strong> word.</p>
-                    <p>Example of a table:</p>
-                    <table>
-                      <tr>
-                        <th style="width: 300px;">Col 1</th>
-                        <th>Col 2</th>
-                      </tr>
-                      <tr>
-                        <td>ROW 1</td>
-                        <td>ROW 1</td>
-                      </tr>
-                      <tr>
-                        <td>ROW 2</td>
-                        <td>ROW 2</td>
-                      </tr>
-                    </table>
-                    <div style="page-break-before: always;">test</div>
-                    <div>test</div>
-                  </body>
-                </html>
-            `)
         });
     } catch(err) {
         console.error(err)

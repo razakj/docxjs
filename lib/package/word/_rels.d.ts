@@ -1,4 +1,4 @@
 import { ContentOptions } from "../contenttypes";
-import { ImageIndex } from "./parts/image";
-declare const _default: (contentOptions: ContentOptions, imageIndex: ImageIndex[]) => string;
+import { FileIndex } from "../../index";
+declare const _default: (contentOptions: ContentOptions, fileIndex: FileIndex[]) => string;
 export default _default;

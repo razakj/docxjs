@@ -1,8 +1,9 @@
-import {ImageIndex}          from "./parts/image";
+import {FileIndex} from "../../index";
 
-export default (imageIndex: ImageIndex[]): string => (`
+
+export default (fileIndex: FileIndex[]): string => (`
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-    ${imageIndex.map(img => `<Relationship Id="${img.fileName}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/${img.fileName}"/>`)}
+    ${fileIndex.map(f => `<Relationship Id="${f.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/${f.type}" Target="/${f.fullPath}" />`).join(' ')}
 </Relationships>
 `)

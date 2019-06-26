@@ -1,5 +1,7 @@
 import {cmToTwips} from "../../tools";
 import {ContentOptions} from "../contenttypes";
+import getDocumentContent, {DocumentBody} from "./parts/content";
+import {FileIndex} from "../../index";
 
 export enum DocumentOrientation {
     PORTRAIT    = "portrait",
@@ -19,7 +21,7 @@ export interface DocumentProperties {
     orientation?         :   DocumentOrientation
 }
 
-export default (documentProperties: DocumentProperties, contentOptions: ContentOptions): string => (`
+export default (documentBody: DocumentBody[], documentProperties: DocumentProperties, contentOptions: ContentOptions, fileIndex: FileIndex[]): string => (`
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <w:document mc:Ignorable="w14 w15 w16se wp14" 
     xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" 
@@ -43,7 +45,7 @@ export default (documentProperties: DocumentProperties, contentOptions: ContentO
     xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
 >
 <w:body>
-    <w:altChunk r:id="htmlDoc" />
+    ${documentBody.map(body => getDocumentContent(body, fileIndex, 'document.xml')).join('')}
     <w:sectPr>
         <w:pgNumType />
         ${contentOptions.hasFirstPageHeader || contentOptions.hasFirstPageFooter ? '<w:titlePg />' : ''}

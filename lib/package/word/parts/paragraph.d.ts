@@ -1,17 +1,20 @@
 import { StylesProperties } from "../styles";
 import { Text } from './text';
-import { Image, ImageIndex } from './image';
+import { Image } from './image';
+import { FileIndex } from "../../../index";
 export declare enum ParagraphContentType {
     TEXT = "text",
     IMAGE = "image"
 }
-export interface ParagraphContent {
+export interface ParagraphContentObject {
     type: ParagraphContentType;
     data: Text | Image;
 }
-export interface Paragraph {
+export declare type ParagraphContent = ParagraphContentObject | string;
+export interface ParagraphProps {
     content?: ParagraphContent | ParagraphContent[];
     styleId?: keyof StylesProperties;
 }
-declare const _default: (p: Paragraph, imageIndex: ImageIndex[], sourceName: string) => string;
+export declare type Paragraph = ParagraphProps | string;
+declare const _default: (p: Paragraph, fileIndex: FileIndex[], sourceName: string) => string;
 export default _default;

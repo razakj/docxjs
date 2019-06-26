@@ -1,10 +1,11 @@
 import fs                               from 'fs';
 import path                             from 'path';
 import JSZip                            from 'jszip';
-import getContentTypes                  from './package/contenttypes';
+import getContentTypes, {ContentOptions}from './package/contenttypes';
 import getDocProps, {DocPropsOptions}   from './package/docProps';
 import getGlobalRels                    from './package/_rels';
 import getWord, {WordProps}             from './package/word';
+import handleFiles                      from './files';
 
 import {normalizeFileContent}           from "./tools";
 
@@ -31,34 +32,53 @@ enum PACKAGE {
     imageBasePath       = 'word/media'
 }
 
+
+export type HtmlDocumentModifier = (document: Document) => void;
+
 export interface FileHtmlDocxOptions extends HtmlDocxOptions {
-    filePath            : string
+    filePath                : string
 }
 
 export interface HtmlDocxOptions extends WordProps {
-    htmlContent?            : string,
-    docPropsOptions?        : DocPropsOptions
+    docPropsOptions?        : DocPropsOptions,
+    htmlDocumentModifier?   : HtmlDocumentModifier
 }
 
-const getContent = (options: HtmlDocxOptions): JSZip => {
+export enum FileIndexType {
+    AFCHUNK     = "aFChunk",
+    IMAGE       = "image"
+}
+
+export interface FileContentFunctionInput {
+    htmlDocumentModifier?   : HtmlDocumentModifier
+}
+type FileContentFunction = (input: FileContentFunctionInput) => Promise<Buffer>;
+export interface FileIndex {
+    id          : string,
+    fullPath    : string,
+    type        : FileIndexType,
+    sourceName  : string,
+    content?    : Buffer | FileContentFunction;
+}
+
+const getContent = async (options: HtmlDocxOptions): Promise<JSZip> => {
     const jsZip = new JSZip();
 
-    const {htmlContent, docPropsOptions, ...documentOptions} = options;
+    const {docPropsOptions, ...documentOptions} = options;
 
-    const contentOptions       = {
-        hasHtmlContent              : !!htmlContent,
+    const contentOptions: ContentOptions       = {
         hasDefaultHeader            : !!documentOptions.defaultHeader,
         hasDefaultFooter            : !!documentOptions.defaultFooter,
         hasFirstPageHeader          : !!documentOptions.firstPageHeader,
         hasFirstPageFooter          : !!documentOptions.firstPageFooter
     };
 
-    let imageIndex          = [];
+    let fileIndex: FileIndex[]      = [];
 
     const docProps          = getDocProps(docPropsOptions);
     const contentTypes      = getContentTypes(contentOptions);
     const globalRels        = getGlobalRels();
-    const word              = getWord(documentOptions, contentOptions, imageIndex);
+    const word              = getWord(documentOptions, contentOptions, fileIndex);
 
     jsZip
         .file(PACKAGE.contentTypes, normalizeFileContent(contentTypes))
@@ -72,7 +92,6 @@ const getContent = (options: HtmlDocxOptions): JSZip => {
         .file(PACKAGE.webSettings, normalizeFileContent(word.webSettings))
         .file(PACKAGE.docRels, normalizeFileContent(word.docRels));
 
-    if(contentOptions.hasHtmlContent) jsZip.file(PACKAGE.htmlDoc, normalizeFileContent(htmlContent));
     if(contentOptions.hasDefaultHeader) {
         jsZip.file(PACKAGE.header, normalizeFileContent(word.defaultHeader));
         jsZip.file(PACKAGE.headerRels, normalizeFileContent(word.defaultHeaderRels));
@@ -90,21 +109,24 @@ const getContent = (options: HtmlDocxOptions): JSZip => {
         jsZip.file(PACKAGE.firstPageFooterRels, normalizeFileContent(word.firstPageFooterRels));
     }
 
-    imageIndex.forEach(image => {
-        jsZip.file(`${PACKAGE.imageBasePath}/${image.fileName}`, image.buffer);
+    await handleFiles({
+        jsZip, fileIndex,
+        htmlDocumentModifier: options.htmlDocumentModifier
     });
 
     return jsZip;
 };
 
 const asBuffer = async (options: HtmlDocxOptions): Promise<Buffer> => {
-    return getContent(options).generateAsync<"nodebuffer">({
+    const jsZip = await getContent(options);
+    return jsZip.generateAsync<"nodebuffer">({
         type: "nodebuffer"
     });
 };
 
-const asStream = (options: HtmlDocxOptions): NodeJS.ReadableStream => {
-    return getContent(options).generateNodeStream();
+const asStream = async (options: HtmlDocxOptions): Promise<NodeJS.ReadableStream> => {
+    const jsZip = await getContent(options);
+    return jsZip.generateNodeStream();
 };
 
 const toFile = async (options: FileHtmlDocxOptions): Promise<void> => {
