@@ -9,33 +9,33 @@ const docxjs = require('../lib/index');
             filePath    : 'C:\\Users\\jakub\\Desktop\\test.docx',
             defaultHeader       : {
                 pageNumber      : {
-                    label       : 'Page #',
-                    position    : "TOP"
-                },
-                body            : [
-                    {paragraph  : {
-                        content : {
-                            type    : "image",
-                            data    : {
-                                fileName        : 'test.jpg',
-                                title           : 'Test',
-                                description     : 'Testing',
-                                url             : 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
-                                widthInCm       : 50,
-                                heightInCm      : 1,
-                                position        : "relative",
-                                isBackground    : true,
-                                relativePositionOptions : {
-                                    horizontalRelativeFrom  : "page",
-                                    verticalRelativeFrom    : "page",
-                                    horizontalPosition      : "center",
-                                    verticalPosition        : "center"
-                                }
-                            }
-                        }
-                    }},
-                    {html: '<html><head></head><body><table style="width: 100%"><tbody><tr><td style="color: red;">sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
-                ]
+                    label       : 'Page # ',
+                    position    : "top"
+                }
+                // body            : [
+                //     {paragraph  : {
+                //         content : {
+                //             type    : "image",
+                //             data    : {
+                //                 fileName        : 'test.jpg',
+                //                 title           : 'Test',
+                //                 description     : 'Testing',
+                //                 url             : 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+                //                 widthInCm       : 50,
+                //                 heightInCm      : 1,
+                //                 position        : "relative",
+                //                 isBackground    : true,
+                //                 relativePositionOptions : {
+                //                     horizontalRelativeFrom  : "page",
+                //                     verticalRelativeFrom    : "page",
+                //                     horizontalPosition      : "center",
+                //                     verticalPosition        : "center"
+                //                 }
+                //             }
+                //         }
+                //     }},
+                //     {html: '<html><head></head><body><table style="width: 100%"><tbody><tr><td style="color: red;">sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
+                // ]
             },
             documentProperties         : {
                 headerFromTopInCm       : 0,
