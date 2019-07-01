@@ -33,7 +33,7 @@ export enum ImageVerticalRelativeFrom {
 export enum ImageRelativePosition {
     CENTER          = "center",
     INSIDE          = "inside",
-    left            = "left",
+    LEFT            = "left",
     OUTSIDE         = "outside",
     RIGHT           = "right"
 }

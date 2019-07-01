@@ -8,6 +8,10 @@ const docxjs = require('../lib/index');
         const b = await docxjs.toFile({
             filePath    : 'C:\\Users\\jakub\\Desktop\\test.docx',
             defaultHeader       : {
+                pageNumber      : {
+                    label       : 'Page #',
+                    position    : "TOP"
+                },
                 body            : [
                     {paragraph  : {
                         content : {
@@ -16,7 +20,7 @@ const docxjs = require('../lib/index');
                                 fileName        : 'test.jpg',
                                 title           : 'Test',
                                 description     : 'Testing',
-                                buffer          : fs.readFileSync(path.join('C:\\Users\\jakub\\Pictures', 'unnamed.jpg')),
+                                url             : 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
                                 widthInCm       : 50,
                                 heightInCm      : 1,
                                 position        : "relative",
@@ -24,19 +28,21 @@ const docxjs = require('../lib/index');
                                 relativePositionOptions : {
                                     horizontalRelativeFrom  : "page",
                                     verticalRelativeFrom    : "page",
-                                    horizontalPosition      : "left",
-                                    verticalPosition        : "top"
+                                    horizontalPosition      : "center",
+                                    verticalPosition        : "center"
                                 }
                             }
                         }
-                    }}
+                    }},
+                    {html: '<html><head></head><body><table style="width: 100%"><tbody><tr><td style="color: red;">sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
                 ]
             },
-            // documentProperties         : {
-            //     headerFromTopInCm       : 0,
-            //     footerFromBottomInCm    : 0,
-            //
-            // },
+            documentProperties         : {
+                headerFromTopInCm       : 0,
+                footerFromBottomInCm    : 0,
+
+
+            },
             // firstPageHeader             : {
             //     body                    : [
             //         {paragraph: {content    : [
@@ -76,16 +82,13 @@ const docxjs = require('../lib/index');
                 {paragraph: {
                     content : ['test', '  test2']
                 }},
-                {html: '<html><head></head><body><table><tbody><tr><td>sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
-                {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
+                //{html: '<html><head></head><body><table><tbody><tr><td>sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
+                // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'}
             ],
-            htmlDocumentModifier: document => {
-                document.querySelectorAll('table').forEach(t => t.parentNode.removeChild(t));
-            },
             docDefaults : {
                 default : {
                     paragraph: {
