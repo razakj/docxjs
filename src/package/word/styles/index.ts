@@ -1,5 +1,6 @@
 import {ParagraphStyle, paragraphStylesMap} from "./paragraphstyles";
 import {TextStyle, textStylesMap} from "./textstyles";
+import tocStyles from './toc';
 
 export enum StyleType {
     PARAGRAPH   = "paragraph",
@@ -74,6 +75,7 @@ export default (s: StylesProperties,docDefaults?: StylesProperties): string => {
             ${s[styleId].text      ? injectTextStyle(s[styleId].text) : ''}
         </w:style>
     `))}
+    ${tocStyles}
 </w:styles>
     `)
 }

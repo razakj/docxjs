@@ -7,42 +7,42 @@ const docxjs = require('../lib/index');
     try {
         const b = await docxjs.toFile({
             filePath    : 'C:\\Users\\jakub\\Desktop\\test.docx',
-            defaultHeader       : {
-                pageNumber      : {
-                    label       : 'Page # ',
-                    position    : "top"
-                }
-                // body            : [
-                //     {paragraph  : {
-                //         content : {
-                //             type    : "image",
-                //             data    : {
-                //                 fileName        : 'test.jpg',
-                //                 title           : 'Test',
-                //                 description     : 'Testing',
-                //                 url             : 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
-                //                 widthInCm       : 50,
-                //                 heightInCm      : 1,
-                //                 position        : "relative",
-                //                 isBackground    : true,
-                //                 relativePositionOptions : {
-                //                     horizontalRelativeFrom  : "page",
-                //                     verticalRelativeFrom    : "page",
-                //                     horizontalPosition      : "center",
-                //                     verticalPosition        : "center"
-                //                 }
-                //             }
-                //         }
-                //     }},
-                //     {html: '<html><head></head><body><table style="width: 100%"><tbody><tr><td style="color: red;">sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
-                // ]
-            },
-            documentProperties         : {
-                headerFromTopInCm       : 0,
-                footerFromBottomInCm    : 0,
-
-
-            },
+            // defaultHeader       : {
+            //     pageNumber      : {
+            //         label       : 'Page # ',
+            //         position    : "top"
+            //     }
+            //     // body            : [
+            //     //     {paragraph  : {
+            //     //         content : {
+            //     //             type    : "image",
+            //     //             data    : {
+            //     //                 fileName        : 'test.jpg',
+            //     //                 title           : 'Test',
+            //     //                 description     : 'Testing',
+            //     //                 url             : 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+            //     //                 widthInCm       : 50,
+            //     //                 heightInCm      : 1,
+            //     //                 position        : "relative",
+            //     //                 isBackground    : true,
+            //     //                 relativePositionOptions : {
+            //     //                     horizontalRelativeFrom  : "page",
+            //     //                     verticalRelativeFrom    : "page",
+            //     //                     horizontalPosition      : "center",
+            //     //                     verticalPosition        : "center"
+            //     //                 }
+            //     //             }
+            //     //         }
+            //     //     }},
+            //     //     {html: '<html><head></head><body><table style="width: 100%"><tbody><tr><td style="color: red;">sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
+            //     // ]
+            // },
+            // documentProperties         : {
+            //     headerFromTopInCm       : 0,
+            //     footerFromBottomInCm    : 0,
+            //
+            //
+            // },
             // firstPageHeader             : {
             //     body                    : [
             //         {paragraph: {content    : [
@@ -79,39 +79,44 @@ const docxjs = require('../lib/index');
                 //         data    : "Hello i'm text"
                 //     }
                 // ]}},
-                {paragraph: {
-                    content : ['test', '  test2']
+                {toc: {
+                    chapters : [
+                        {label: 'test1', id: '1', chapters: [
+                            {id: '3', label: 'Test1-1'}
+                        ]},
+                        {label: 'test2', id: '2'}
+                    ]
                 }},
-                //{html: '<html><head></head><body><table><tbody><tr><td>sdasdsa</td><td>adasdasdas</td></tr></tbody></table></body></html>'},
+                {html: '<html><head></head><body><br /><br /><br /><br /><br /><br /><br /><br /><a name="1">aaaaa</a><a name="3">sub</a><br /><br /><br /><br /><br /><br /><br /><br /><h1>2<a name="2" style="display: none;"></a></h1></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'},
                 // {html: '<html><head></head><body><strong>BODY</strong></body></html>'}
             ],
-            docDefaults : {
-                default : {
-                    paragraph: {
-                        spacing : {
-                            after : 0,
-                            before:0
-                        }
-                    },
-                    text    : {
-                        font : {
-                            ascii : 'Courier New'
-                        }
-                    }
-                }
-            },
-            styles      : {
-                testTextStyle: {
-                    type    : "character",
-                    text    : {
-                        color: 'red'
-                    }
-                }
-            },
+            // docDefaults : {
+            //     default : {
+            //         paragraph: {
+            //             spacing : {
+            //                 after : 0,
+            //                 before:0
+            //             }
+            //         },
+            //         text    : {
+            //             font : {
+            //                 ascii : 'Courier New'
+            //             }
+            //         }
+            //     }
+            // },
+            // styles      : {
+            //     testTextStyle: {
+            //         type    : "character",
+            //         text    : {
+            //             color: 'red'
+            //         }
+            //     }
+            // },
         });
     } catch(err) {
         console.error(err)

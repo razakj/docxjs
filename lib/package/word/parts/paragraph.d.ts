@@ -4,7 +4,8 @@ import { Image } from './image';
 import { FileIndex } from "../../../index";
 export declare enum ParagraphContentType {
     TEXT = "text",
-    IMAGE = "image"
+    IMAGE = "image",
+    TOC = "toc"
 }
 export interface ParagraphContentObject {
     type: ParagraphContentType;

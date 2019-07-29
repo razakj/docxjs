@@ -1,11 +1,13 @@
 import {StylesProperties}           from "../styles";
 import getText, {Text}              from './text';
-import getImage, {Image}            from './image'
+import getImage, {Image}            from './image';
+import getToc, {TableOfContents}    from './toc';
 import {FileIndex} from "../../../index";
 
 export enum ParagraphContentType {
     TEXT    = "text",
-    IMAGE   = "image"
+    IMAGE   = "image",
+    TOC     = "toc"
 }
 
 export interface ParagraphContentObject {
@@ -24,7 +26,8 @@ export type Paragraph = ParagraphProps | string;
 
 const paragraphContentMap = {
     text    : getText,
-    image   : getImage
+    image   : getImage,
+    toc     : getToc
 };
 
 const getContentTypeFunction    = (c: ParagraphContent) => typeof c === "object" && paragraphContentMap.hasOwnProperty(c.type) ? paragraphContentMap[c.type] : getText;

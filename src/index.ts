@@ -20,6 +20,8 @@ enum PACKAGE {
     styles              = 'word/styles.xml',
     webSettings         = 'word/webSettings.xml',
     docRels             = 'word/_rels/document.xml.rels',
+    vbaRels             = 'word/_rels/vbaProject.bin.rels',
+    vbaData             = 'word/vbaData.xml',
     htmlDoc             = 'word/htmlDoc.html',
     header              = 'word/defaultHeader.xml',
     headerRels          = 'word/_rels/defaultHeader.xml.rels',
@@ -46,7 +48,8 @@ export interface HtmlDocxOptions extends WordProps {
 
 export enum FileIndexType {
     AFCHUNK     = "aFChunk",
-    IMAGE       = "image"
+    IMAGE       = "image",
+    VBA         = "vbaProject"
 }
 
 export interface FileContentFunctionInput {
@@ -70,7 +73,9 @@ const getContent = async (options: HtmlDocxOptions): Promise<JSZip> => {
         hasDefaultHeader            : !!documentOptions.defaultHeader,
         hasDefaultFooter            : !!documentOptions.defaultFooter,
         hasFirstPageHeader          : !!documentOptions.firstPageHeader,
-        hasFirstPageFooter          : !!documentOptions.firstPageFooter
+        hasFirstPageFooter          : !!documentOptions.firstPageFooter,
+        hasVba                      : documentOptions.vba
+            && (typeof documentOptions.vba.bin === "string" || documentOptions.vba.bin instanceof Buffer)
     };
 
     let fileIndex: FileIndex[]      = [];
@@ -107,6 +112,11 @@ const getContent = async (options: HtmlDocxOptions): Promise<JSZip> => {
     if(contentOptions.hasFirstPageFooter) {
         jsZip.file(PACKAGE.firstPageFooter, normalizeFileContent(word.firstPageFooter));
         jsZip.file(PACKAGE.firstPageFooterRels, normalizeFileContent(word.firstPageFooterRels));
+    }
+
+    if(contentOptions.hasVba) {
+        jsZip.file(PACKAGE.vbaRels, normalizeFileContent(word.vbaRels));
+        jsZip.file(PACKAGE.vbaData, normalizeFileContent(word.vbaData));
     }
 
     await handleFiles({

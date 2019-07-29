@@ -11,7 +11,8 @@ export interface HtmlDocxOptions extends WordProps {
 }
 export declare enum FileIndexType {
     AFCHUNK = "aFChunk",
-    IMAGE = "image"
+    IMAGE = "image",
+    VBA = "vbaProject"
 }
 export interface FileContentFunctionInput {
     htmlDocumentModifier?: HtmlDocumentModifier;

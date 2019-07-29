@@ -6,6 +6,7 @@ import getWebSettings, {WebSettingsProperties} from "./websettings";
 import getDocRels from "./_rels";
 import getHeaderOrFooter, {HeaderFooterProperties, HeaderFooterType} from './headerfooter';
 import getReaderOrFooterRels from './_rels-headerfooter';
+import getVba, {VbaProps}   from './vba';
 
 import {ContentOptions} from "../contenttypes";
 import {FileIndex} from "../../index";
@@ -25,11 +26,14 @@ export interface Word {
     firstPageHeader     : string,
     firstPageHeaderRels : string,
     firstPageFooter     : string,
-    firstPageFooterRels : string
+    firstPageFooterRels : string,
+    vbaRels             : string,
+    vbaData             : string
 }
 
 export interface WordProps {
     body                    : DocumentBody[],
+    vba?                    : VbaProps,
     documentProperties?     : DocumentProperties,
     settingsProperties?     : SettingsProperties,
     styles?                 : StylesProperties,
@@ -78,6 +82,11 @@ export default (wordProps: WordProps, contentOptions: ContentOptions, fileIndex:
         }) : '',
     };
 
+    const vba           = contentOptions.hasVba ? getVba(wordProps.vba, fileIndex) : {
+        vbaRels : '',
+        vbaData : ''
+    };
+
     return {
         document,
         fontTable           : getFontTable(wordProps.fontTableProperties ? wordProps.fontTableProperties : {} as FontTableProperties),
@@ -90,5 +99,6 @@ export default (wordProps: WordProps, contentOptions: ContentOptions, fileIndex:
         defaultFooterRels   : getReaderOrFooterRels(fileIndex.filter(i => i.sourceName === 'defaultFooter.xml')),
         firstPageHeaderRels : getReaderOrFooterRels(fileIndex.filter(i => i.sourceName === 'firstPageHeader.xml')),
         firstPageFooterRels : getReaderOrFooterRels(fileIndex.filter(i => i.sourceName === 'firstPageFooter.xml')),
+        ...vba
     }
 };

@@ -4,6 +4,7 @@ import { SettingsProperties } from "./settings";
 import { StylesProperties } from "./styles";
 import { WebSettingsProperties } from "./websettings";
 import { HeaderFooterProperties } from './headerfooter';
+import { VbaProps } from './vba';
 import { ContentOptions } from "../contenttypes";
 import { FileIndex } from "../../index";
 import { DocumentBody } from "./parts/content";
@@ -22,9 +23,12 @@ export interface Word {
     firstPageHeaderRels: string;
     firstPageFooter: string;
     firstPageFooterRels: string;
+    vbaRels: string;
+    vbaData: string;
 }
 export interface WordProps {
     body: DocumentBody[];
+    vba?: VbaProps;
     documentProperties?: DocumentProperties;
     settingsProperties?: SettingsProperties;
     styles?: StylesProperties;

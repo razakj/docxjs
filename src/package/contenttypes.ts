@@ -2,7 +2,8 @@ export interface ContentOptions {
     hasDefaultHeader            : boolean,
     hasDefaultFooter            : boolean,
     hasFirstPageHeader          : boolean,
-    hasFirstPageFooter          : boolean
+    hasFirstPageFooter          : boolean,
+    hasVba                      : boolean
 }
 
 
@@ -24,8 +25,11 @@ export default (contentTypeProperties: ContentOptions): string => (`
     ${contentTypeProperties.hasFirstPageHeader      ?
         '<Override PartName="/word/firstPageHeader.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>' : ''
     }
-     ${contentTypeProperties.hasFirstPageFooter     ?
+    ${contentTypeProperties.hasFirstPageFooter     ?
         '<Override PartName="/word/firstPageFooter.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' : ''
+    }
+    ${contentTypeProperties.hasVba     ?
+        '<Override PartName="/word/vbaData.xml" ContentType="application/vnd.ms-word.vbaData+xml"/> <Default Extension="bin" ContentType="application/vnd.ms-office.vbaProject"/>' : ''
     }
     <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
     <Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>
